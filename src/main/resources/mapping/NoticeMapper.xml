@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hrm.mapper.NoticeMapper" >
+
+  <resultMap id="noticeList" type="com.hrm.domain.Notice">
+    <result property="id" column="ID"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="create_date" column="create_date"/>
+    <result property="username" column="username"/>
+  </resultMap>
+
+    <select id="getNoticeListByContent" parameterType="com.hrm.domain.Condition" resultMap="noticeList">
+        select * from notice_inf d
+        <where>
+            1=1
+            <if test="title!=null and title !=''">
+                and  d.title like '%${title}%'
+            </if>
+            <if test="userName!=null and userName!='' ">
+                and  d.username like '%${userName}%'
+            </if>
+            <if test="startDate!=null and startDate!=''">
+                and  substr(d.create_date,1,10) >= #{startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and  substr(d.create_date,1,10) <![CDATA[<=]]>#{endDate}
+            </if>
+        </where>
+        LIMIT #{start},#{end}
+    </select>
+
+    <select id="queryNoticeCountByContent" parameterType="com.hrm.domain.Condition" resultType="Integer">
+        select count(1) from notice_inf d
+        <where>
+            1=1
+            <if test="title!=null and title !=''">
+                and  d.title like '%${title}%'
+            </if>
+            <if test="userName!=null and userName!='' ">
+                and  d.username like '%${userName}%'
+            </if>
+            <if test="startDate!=null and startDate!=''">
+                and  substr(d.create_date,1,10) >= #{startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and  substr(d.create_date,1,10) <![CDATA[<=]]>#{endDate}
+            </if>
+        </where>
+    </select>
+
+
+
+  <insert id="insertNoticeInfo" parameterType="com.hrm.domain.Notice">
+         insert into notice_inf(title,content,create_date,username)
+        VALUES (#{title},#{content},#{create_date},#{username})
+  </insert>
+
+  <update id="updateNoticeInfo" parameterType="com.hrm.domain.Notice">
+         update notice_inf set title = #{title},content = #{content},create_date = #{create_date},username = #{username}
+        where id = #{id}
+  </update>
+
+</mapper>

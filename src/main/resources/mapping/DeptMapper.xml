@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hrm.mapper.DeptMapper" >
+
+  <resultMap id="deptList" type="com.hrm.domain.Dept">
+    <result property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="remark" column="remark"/>
+  </resultMap>
+
+  <insert id="insertDept" parameterType="com.hrm.domain.Dept">
+         insert into dept_inf(name,remark)
+        VALUES (#{name},#{remark})
+  </insert>
+
+  <update id="updateDept" parameterType="com.hrm.domain.Dept">
+         update dept_inf set name = #{name},remark = #{remark}
+        where id = #{id}
+  </update>
+
+</mapper>

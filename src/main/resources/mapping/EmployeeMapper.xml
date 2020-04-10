@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hrm.mapper.EmployeeMapper" >
+
+  <resultMap id="employeeList" type="com.hrm.domain.Employee">
+    <result property="id" column="id"/>
+    <result property="deptId" column="dept_id"/>
+    <result property="jobId" column="job_id"/>
+    <result property="name" column="name"/>
+    <result property="cardId" column="card_id"/>
+    <result property="address" column="address"/>
+    <result property="postCode" column="post_code"/>
+    <result property="tel" column="tel"/>
+    <result property="phone" column="phone"/>
+    <result property="qqNum" column="qq_num"/>
+    <result property="email" column="email"/>
+    <result property="sex" column="sex"/>
+    <result property="party" column="party"/>
+    <result property="birthday" column="birthday"/>
+    <result property="race" column="race"/>
+    <result property="education" column="education"/>
+    <result property="speciality" column="speciality"/>
+    <result property="hobby" column="hobby"/>
+    <result property="remark" column="remark"/>
+    <result property="createDate" column="create_date"/>
+  </resultMap>
+
+    <select id="findEmployee" resultMap="employeeList">
+        select * from employee_inf LIMIT #{start},#{end}
+    </select>
+
+    <select id="queryEmployeeCountByContent" parameterType="com.hrm.domain.Condition" resultType="Integer">
+        select count(1) from employee_inf d
+        <where>
+            1=1
+            <if test="deptId!= 0 ">
+                and  d.dept_id = #{deptId}
+            </if>
+            <if test="jobId!= 0 ">
+                and  d.job_id = #{jobId}
+            </if>
+            <if test="sex!=null and sex!='' ">
+                and  d.sex = #{sex}
+            </if>
+            <if test="userName!=null and userName!='' ">
+                and  d.name = #{userName}
+            </if>
+            <if test="address!=null and address!='' ">
+                and  d.address = #{address}
+            </if>
+            <if test="phone!=null and phone!='' ">
+                and  d.phone = #{phone}
+            </if>
+            <if test="startDate!=null and startDate!=''">
+                and  substr(d.create_date,1,10) >= #{startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and  substr(d.create_date,1,10) <![CDATA[<=]]>#{endDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="findEmployeeByContent" parameterType="com.hrm.domain.Condition" resultMap="employeeList">
+        select * from employee_inf d
+        <where>
+            1=1
+            <if test="deptId!=null and deptId !=''">
+                and  d.dept_id = #{deptId}
+            </if>
+            <if test="jobId!=null and jobId !=''">
+                and  d.job_id = #{jobId}
+            </if>
+            <if test="sex!=null and sex!='' ">
+                and  d.sex = #{sex}
+            </if>
+            <if test="userName!=null and userName!='' ">
+                and  d.name = #{userName}
+            </if>
+            <if test="address!=null and address!='' ">
+                and  d.address = #{address}
+            </if>
+            <if test="phone!=null and phone!='' ">
+                and  d.phone = #{phone}
+            </if>
+            <if test="startDate!=null and startDate!=''">
+                and  substr(d.create_date,1,10) >= #{startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and  substr(d.create_date,1,10) <![CDATA[<=]]>#{endDate}
+            </if>
+        </where>
+        LIMIT #{start},#{end}
+    </select>
+
+    <select id="getEmployeeInfo" resultMap="employeeList">
+        select * from employee_inf where id = #{id}
+    </select>
+
+  <insert id="insertEmployee" parameterType="com.hrm.domain.Employee">
+         insert into employee_inf(dept_id,job_id,name,card_id,address,post_code,tel,phone,qq_num,email,sex,party,birthday,race,education,speciality,hobby,remark,create_date)
+        VALUES (#{deptId},#{jobId},#{name},#{cardId},#{address},#{postCode},#{tel},#{phone},#{qqNum},#{email},#{sex},#{party},#{birthday},#{race},#{education},#{speciality},#{hobby},#{remark},#{createDate})
+  </insert>
+
+  <update id="updateEmployee" parameterType="com.hrm.domain.Employee">
+         update employee_inf set
+            dept_id = #{deptId},job_id = #{jobId},name = #{name},card_id = #{cardId},address = #{address},post_code = #{postCode},tel = #{tel},
+            phone = #{phone},qq_num = #{qqNum},email = #{email},sex = #{sex},party = #{party},birthday = #{birthday},race = #{race},
+            education = #{education},speciality = #{speciality},hobby = #{hobby},remark = #{remark},create_date = #{createDate}
+        where id = #{id}
+  </update>
+
+</mapper>
